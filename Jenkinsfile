@@ -10,6 +10,14 @@ pipeline {
         REACT_APP_API_URL = "${REACT_APP_API_URL}"
     }
     stages {
+        stage('Preparation') {
+            steps {
+                script {
+                    // Clean workspace before starting
+                    sh 'apt-get update && apt-get install -y docker.io'
+                }
+            }
+        }
 
         stage('Checkout') {
             steps {
