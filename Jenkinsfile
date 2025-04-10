@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
         DOCKER_PASS = credentials('DOCKER_PASS')
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
     stages {
 
@@ -20,7 +21,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
-                        sh 'docker build -t demoniiexe/microservice-frontend:"${env.BUILD_ID}" '
+                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" '
                     }
                 }
             }
@@ -31,7 +32,7 @@ pipeline {
                     
                         // Login to Docker Hub
                         sh 'docker login -u demoniiexe -p $DOCKER_PASS'
-                        sh 'docker push demoniiexe/microservice-frontend:"${env.BUILD_ID}"'
+                        sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
                     
                 }
             }
@@ -57,10 +58,10 @@ pipeline {
 
                         if (isInstalled) {
                             echo "Helm release '${releaseName}' is already installed."
-                            sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${env.BUILD_ID}'
+                            sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}'
                         } else {
                             echo "Helm release '${releaseName}' is not installed. Installing now..."
-                            sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${env.BUILD_ID}"'
+                            sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
                         }
                     }
             }   
