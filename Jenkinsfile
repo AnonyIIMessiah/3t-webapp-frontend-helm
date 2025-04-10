@@ -21,7 +21,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
-                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" '
+                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG} ." '
                     }
                 }
             }
