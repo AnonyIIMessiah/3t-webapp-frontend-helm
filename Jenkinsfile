@@ -22,7 +22,6 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
-                        def fullImage=
                         sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
                         sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
                     }
