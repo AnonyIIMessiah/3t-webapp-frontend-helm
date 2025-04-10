@@ -68,7 +68,7 @@ pipeline {
 
                         if (isInstalled) {
                             echo "Helm release '${releaseName}' is already installed."
-                            sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}'
+                            sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
                         } else {
                             echo "Helm release '${releaseName}' is not installed. Installing now..."
                             sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
