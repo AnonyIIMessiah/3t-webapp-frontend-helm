@@ -1,0 +1,26 @@
+appName: frontend
+namespace: default
+
+deployment:
+  replicas: 1
+  image:
+    repository: demoniiexe/microservice-frontend
+    tag: latest
+    pullPolicy: Always
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 512Mi
+
+service:
+  port: 80
+  targetPort: 80
+  type: ClusterIP
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  cpuUtilizationPercentage: 30

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name: frontend
+  name: {{ .Values.appName }}
+  labels:
+    app: {{ .Values.appName }}
+    namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+    spec:
+      containers:
+        - name: {{ .Values.appName }}
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          # image: demoniiexe/microservice-frontend:latest
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          resources:
+            requests:
+              cpu: {{ .Values.deployment.requests.cpu }}
+              memory: {{ .Values.deployment.requests.memory }}
+            limits:
+              cpu: {{ .Values.deployment.limits.cpu }}
+              memory: {{ .Values.deployment.limits.memory }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }} #only required for documentation purposes
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 80
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 100
