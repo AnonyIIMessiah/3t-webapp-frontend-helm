@@ -46,20 +46,22 @@ pipeline {
         stage('Deploy') {
             
             steps {
-                    def releaseName = "frontend"
-                    def namespace = "default"
+                    script {
+                        def releaseName = "frontend"
+                        def namespace = "default"
 
-                    def isInstalled = sh(
-                        script: "helm list -n ${namespace} -q | grep -w ${releaseName} || true",
-                        returnStdout: true
-                    ).trim()
+                        def isInstalled = sh(
+                            script: "helm list -n ${namespace} -q | grep -w ${releaseName} || true",
+                            returnStdout: true
+                        ).trim()
 
-                    if (isInstalled) {
-                        echo "Helm release '${releaseName}' is already installed."
-                        sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${env.BUILD_ID}'
-                    } else {
-                        echo "Helm release '${releaseName}' is not installed. Installing now..."
-                        sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${env.BUILD_ID}"'
+                        if (isInstalled) {
+                            echo "Helm release '${releaseName}' is already installed."
+                            sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${env.BUILD_ID}'
+                        } else {
+                            echo "Helm release '${releaseName}' is not installed. Installing now..."
+                            sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${env.BUILD_ID}"'
+                        }
                     }
             }   
         }
