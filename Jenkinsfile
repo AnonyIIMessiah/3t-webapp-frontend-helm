@@ -7,7 +7,7 @@ pipeline {
     environment {
         DOCKER_PASS = credentials('DOCKER_PASS')
         IMAGE_TAG = "${BUILD_NUMBER}"
-        REACT_APP_API_URL = credentials{REACT_APP_API_URL}
+        REACT_APP_API_URL = credentials('REACT_APP_API_URL')
     }
     stages {
         stage('Preparation') {
