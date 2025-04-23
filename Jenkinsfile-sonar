@@ -54,55 +54,55 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
-            steps {
-                dir('frontend') {
-                    script {
-                        sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
-                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
-                    }
-                }
-            }
-        }
-        stage('Push') {
-            steps {
-                script {
+        // stage('Build') {
+        //     steps {
+        //         dir('frontend') {
+        //             script {
+        //                 sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
+        //                 sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Push') {
+        //     steps {
+        //         script {
                     
-                        // Login to Docker Hub
-                        sh 'docker login -u demoniiexe -p $DOCKER_PASS'
-                        sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+        //                 // Login to Docker Hub
+        //                 sh 'docker login -u demoniiexe -p $DOCKER_PASS'
+        //                 sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
                     
-                }
-            }
-        }
-        stage('EKS-setup') {
-            steps {
-                script {
-                    sh 'aws eks update-kubeconfig --name task-eks --region ap-south-1'
-                }
-            }
-        }
-        stage('Deploy') {
+        //         }
+        //     }
+        // }
+        // stage('EKS-setup') {
+        //     steps {
+        //         script {
+        //             sh 'aws eks update-kubeconfig --name task-eks --region ap-south-1'
+        //         }
+        //     }
+        // }
+        // stage('Deploy') {
             
-            steps {
-                    script {
-                        def releaseName = "frontend"
-                        def namespace = "default"
+        //     steps {
+        //             script {
+        //                 def releaseName = "frontend"
+        //                 def namespace = "default"
 
-                        def isInstalled = sh(
-                            script: "helm list -n ${namespace} -q | grep -w ${releaseName} || true",
-                            returnStdout: true
-                        ).trim()
+        //                 def isInstalled = sh(
+        //                     script: "helm list -n ${namespace} -q | grep -w ${releaseName} || true",
+        //                     returnStdout: true
+        //                 ).trim()
 
-                        if (isInstalled) {
-                            echo "Helm release '${releaseName}' is already installed."
-                            sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
-                        } else {
-                            echo "Helm release '${releaseName}' is not installed. Installing now..."
-                            sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
-                        }
-                    }
-            }   
-        }
+        //                 if (isInstalled) {
+        //                     echo "Helm release '${releaseName}' is already installed."
+        //                     sh 'helm upgrade frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
+        //                 } else {
+        //                     echo "Helm release '${releaseName}' is not installed. Installing now..."
+        //                     sh 'helm install frontend frontend-helm-custom --set deployment.image.tag="${IMAGE_TAG}"'
+        //                 }
+        //             }
+        //     }   
+        // }
     }
 }
