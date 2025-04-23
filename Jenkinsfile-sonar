@@ -33,20 +33,29 @@ pipeline {
             }
         }
          stage('SonarCloud Analysis') {
+            // steps {
+            //     // Wrap the SonarQube analysis step
+            //     withSonarQubeEnv('SonarCloud') {
+            //         '''
+            //         sh "${tool 'SonarScanner'}/bin/sonar-scanner \
+            //               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+            //               -Dsonar.organization=${SONAR_ORGANIZATION} \
+            //               -Dsonar.host.url=https://sonarcloud.io \
+            //               -Dsonar.login=${SONAR_TOKEN} \
+            //               -Dsonar.sources=./frontend \
+            //               -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js \
+            //         '''
+            //     }
             steps {
-                // Wrap the SonarQube analysis step
-                withSonarQubeEnv('SonarCloud') {
-                    '''
-                    sh "${tool 'SonarScanner'}/bin/sonar-scanner \
-                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                          -Dsonar.organization=${SONAR_ORGANIZATION} \
-                          -Dsonar.host.url=https://sonarcloud.io \
-                          -Dsonar.login=${SONAR_TOKEN} \
-                          -Dsonar.sources=./frontend \
-                          -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js \
-                    '''
-                }
-                
+        withSonarQubeEnv('SonarCloud') {
+            sh "${tool 'SonarScanner'}/bin/sonar-scanner \
+              -Dsonar.projectKey=task-1_3t-webapp-frontend \
+              -Dsonar.organization=task-1 \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=${SONAR_TOKEN} \
+              -Dsonar.sources=./frontend \
+              -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
+        }
                 // Wait for the quality gate result
                 timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
