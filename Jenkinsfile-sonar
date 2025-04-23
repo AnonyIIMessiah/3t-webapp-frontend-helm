@@ -53,12 +53,20 @@ pipeline {
               -Dsonar.organization=task-1 \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.token=${SONAR_TOKEN} \
-              -Dsonar.sources=./frontend \
+              -Dsonar.sources=. \
               -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
         }
                 // Wait for the quality gate result
                 timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                    // waitForQualityGate abortPipeline: true
+                    script {
+                        def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                echo "Quality Gate failed: ${qg.status}"
+                                echo "Reason: ${qg.conditions}"
+                                currentBuild.result = 'FAILURE'
+                                error "Pipeline aborted due to quality gate failure"
+                    }
                 }
             }
         }
