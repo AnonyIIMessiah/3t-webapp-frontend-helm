@@ -13,9 +13,8 @@ pipeline {
         SONAR_ORGANIZATION = "task-1"    
     }
     tools {
-        // Define the SonarQube Scanner tool
-        sonarScanner 'SonarScanner'
-    }
+    'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
+}
     stages {
         stage('Preparation') {
             steps {
