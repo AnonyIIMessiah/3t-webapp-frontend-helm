@@ -36,6 +36,7 @@ pipeline {
             steps {
                 // Wrap the SonarQube analysis step
                 withSonarQubeEnv('SonarCloud') {
+                    '''
                     sh "${tool 'SonarScanner'}/bin/sonar-scanner \
                           -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                           -Dsonar.organization=${SONAR_ORGANIZATION} \
