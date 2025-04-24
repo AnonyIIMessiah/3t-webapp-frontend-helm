@@ -72,9 +72,9 @@ pipeline {
                     def gitleaksImage = 'zricethezav/gitleaks:latest' // Or a specific version
 
                     try {
-                        sh """
+                        sh '''
                         docker run --rm -v "$(pwd):/repo" ${gitleaksImage} ${gitleaksConfig} --report-path /repo/${reportPath} --report-format json /repo
-                        """
+                        '''
                     } catch (Exception e) {
                         if (e.getMessage().contains('Leaks found:')) {
                             error("Gitleaks found secrets! Check ${reportPath} for details.")
