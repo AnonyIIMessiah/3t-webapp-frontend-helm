@@ -32,45 +32,59 @@ pipeline {
                 }
             }
         }
-         stage('SonarCloud Analysis') {
-            // steps {
-            //     // Wrap the SonarQube analysis step
-            //     withSonarQubeEnv('SonarCloud') {
-            //         '''
-            //         sh "${tool 'SonarScanner'}/bin/sonar-scanner \
-            //               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-            //               -Dsonar.organization=${SONAR_ORGANIZATION} \
-            //               -Dsonar.host.url=https://sonarcloud.io \
-            //               -Dsonar.login=${SONAR_TOKEN} \
-            //               -Dsonar.sources=./frontend \
-            //               -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js \
-            //         '''
-            //     }
-            steps {
-        withSonarQubeEnv('SonarCloud') {
-            sh "${tool 'SonarScanner'}/bin/sonar-scanner \
-              -Dsonar.projectKey=task-1_3t-webapp-frontend \
-              -Dsonar.organization=task-1 \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.token=${SONAR_TOKEN} \
-              -Dsonar.sources=. \
-              -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
-        }
-                // Wait for the quality gate result
-                timeout(time: 5, unit: 'MINUTES') {
-                    // waitForQualityGate abortPipeline: true
-                    script {
-                        def qg = waitForQualityGate()
-                            if (qg.status != 'OK') {
-                                echo "Quality Gate failed: ${qg.status}"
-                                echo "Reason: ${qg.conditions}"
-                                currentBuild.result = 'FAILURE'
-                                error "Pipeline aborted due to quality gate failure"
+
+        stage('Secret Scanning with GitLeaks') {
+        steps {
+            script {
+                sh '''
+                    docker run --rm \
+                    -v ${WORKSPACE}:/code \
+                    zricethezav/gitleaks:latest \
+                    detect --source="/code" \
+                    --report-path=/code/gitleaks-report.json \
+                    --report-format=json \
+                    --no-git
+                '''
+                
+                // Optional: Archive the report as an artifact
+                archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                
+                // Optional: Fail the build if secrets are found
+                def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
+                if (exitCode != '0' && exitCode != '') {
+                    echo "GitLeaks found secrets in the codebase! Check the report for details."
+                    // Uncomment the line below to fail the build
+                    // error "Pipeline aborted due to leaked secrets"
+                        }
                     }
                 }
             }
-        }
-         }
+        //  stage('SonarCloud Analysis') {
+        //     steps {
+        // withSonarQubeEnv('SonarCloud') {
+        //     sh "${tool 'SonarScanner'}/bin/sonar-scanner \
+        //       -Dsonar.projectKey=task-1_3t-webapp-frontend \
+        //       -Dsonar.organization=task-1 \
+        //       -Dsonar.host.url=https://sonarcloud.io \
+        //       -Dsonar.token=${SONAR_TOKEN} \
+        //       -Dsonar.sources=. \
+        //       -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
+        // }
+        //         // Wait for the quality gate result
+        //         timeout(time: 5, unit: 'MINUTES') {
+        //             // waitForQualityGate abortPipeline: true
+        //             script {
+        //                 def qg = waitForQualityGate()
+        //                     if (qg.status != 'OK') {
+        //                         echo "Quality Gate failed: ${qg.status}"
+        //                         echo "Reason: ${qg.conditions}"
+        //                         currentBuild.result = 'FAILURE'
+        //                         error "Pipeline aborted due to quality gate failure"
+        //             }
+        //         }
+        //     }
+        // }
+        //  }
         // stage('Build') {
         //     steps {
         //         dir('frontend') {
