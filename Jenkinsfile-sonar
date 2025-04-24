@@ -67,26 +67,22 @@ pipeline {
         stage('Secret Scan') {
             steps {
                 script {
-                    def gitleaksConfig = '--config .gitleaks.toml' // Optional: Specify a configuration file
+                    def gitleaksConfig = '--config .gitleaks.toml'
                     def reportPath = 'gitleaks-report.json'
+                    def gitleaksImage = 'zricethezav/gitleaks:latest' // Or a specific version
 
-                    // Run gitleaks and generate a JSON report
-                    def gitleaksCommand = "gitleaks $gitleaksConfig --report-path $reportPath --report-format json ."
                     try {
-                        sh "${gitleaksCommand}"
+                        sh """
+                        docker run --rm -v "$(pwd):/repo" ${gitleaksImage} ${gitleaksConfig} --report-path /repo/${reportPath} --report-format json /repo
+                        """
                     } catch (Exception e) {
-                        // Check if the exception was due to gitleaks finding secrets
                         if (e.getMessage().contains('Leaks found:')) {
                             error("Gitleaks found secrets! Check ${reportPath} for details.")
-                            // Optionally, you could fail the build here
-                            // currentBuild.result = 'FAILURE'
                         } else {
-                            // Handle other potential errors
                             throw e
                         }
                     }
 
-                    // Optionally, process the report (e.g., upload as an artifact)
                     archiveArtifacts "${reportPath}"
                 }
             }
