@@ -38,8 +38,10 @@ pipeline {
             script {
                 sh '''
                     echo ${WORKSPACE}
+                    cd ${WORKSPACE}/frontend
+                    ls
                     docker run --rm \
-                    -v ${WORKSPACE}/3t-webapp-frontend-helm:/code \
+                    -v ${WORKSPACE}/frontend:/code \
                     zricethezav/gitleaks:latest \
                     detect --source="/code" \
                     --report-path=/code/gitleaks-report.json \
