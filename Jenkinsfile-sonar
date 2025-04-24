@@ -47,6 +47,7 @@ pipeline {
                     --report-path=/code/gitleaks-report.json \
                     --report-format=json \
                     --no-git
+                    ls -la
                 '''
                 
                 // Optional: Archive the report as an artifact
