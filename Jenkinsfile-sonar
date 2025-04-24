@@ -81,7 +81,7 @@ pipeline {
                 echo 'Testing...'
                 snykSecurity(
                 snykInstallation: 'snyk',
-                snykTokenId: `${SNYK_TOKEN}`,
+                snykTokenId: 'SNYK_TOKEN',
                 // place other parameters here
                 )
             }
