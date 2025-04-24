@@ -37,6 +37,7 @@ pipeline {
         steps {
             script {
                 sh '''
+                    echo ${WORKSPACE}
                     docker run --rm \
                     -v ${WORKSPACE}/3t-webapp-frontend-helm:/code \
                     zricethezav/gitleaks:latest \
