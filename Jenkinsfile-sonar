@@ -51,7 +51,7 @@ pipeline {
                 '''
                 
                 // Optional: Archive the report as an artifact
-                archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                // archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
                 
                 // Optional: Fail the build if secrets are found
                 def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
