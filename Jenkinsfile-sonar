@@ -81,7 +81,7 @@ pipeline {
                 // The plugin will automatically pick up the SNYK_TOKEN env variable
                 snykSecurity(
                     snykInstallation: 'snyk',
-                    // targetFile: 'package.json',
+                    targetFile: 'frontend/package.json',
                     failOnIssues: false,
                     monitorProjectOnBuild: true
                 )
