@@ -65,16 +65,27 @@ pipeline {
                     }
                 }
             }
-            stage('Snyk Test') {
-           steps {
-               script {
-                   // Run Snyk test
+        //     stage('Snyk Test') {
+        //    steps {
+        //        script {
+        //            // Run Snyk test
                    
-                       sh 'snyk test --token=${SNYK_TOKEN}'
+        //                sh 'snyk test --token=${SNYK_TOKEN}'
                    
-               }
-           }
+        //        }
+        //    }
+        //     }
+
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                snykSecurity(
+                snykInstallation: 'snyk',
+                snykTokenId: ${SNYK_TOKEN},
+                // place other parameters here
+                )
             }
+        }
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
