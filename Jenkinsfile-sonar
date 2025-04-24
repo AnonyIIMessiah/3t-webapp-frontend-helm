@@ -76,7 +76,6 @@ pipeline {
         //    }
         //     }
 
-        stages {
         stage('Snyk SCA') {
             steps {
                 withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
@@ -94,7 +93,7 @@ pipeline {
                 }
             }
         }
-    }
+    
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
