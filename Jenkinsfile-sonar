@@ -33,36 +33,64 @@ pipeline {
             }
         }
 
-        stage('Secret Scanning with GitLeaks') {
-        steps {
-            script {
-                sh '''
-                    echo ${WORKSPACE}
-                    cd ${WORKSPACE}/frontend
-                    ls
-                    docker run --rm \
-                    -v ${WORKSPACE}/frontend:/code \
-                    zricethezav/gitleaks:latest \
-                    detect --source="/code" \
-                    --report-path=/code/gitleaks-report.json \
-                    --report-format=json \
-                    --no-git
-                    ls -la
-                '''
+        // stage('Secret Scanning with GitLeaks') {
+        // steps {
+        //     script {
+        //         sh '''
+        //             echo ${WORKSPACE}
+        //             cd ${WORKSPACE}/frontend
+        //             ls
+        //             docker run --rm \
+        //             -v ${WORKSPACE}/frontend:/code \
+        //             zricethezav/gitleaks:latest \
+        //             detect --source="/code" \
+        //             --report-path=/code/gitleaks-report.json \
+        //             --report-format=json \
+        //             --no-git
+        //             ls -la
+        //         '''
                 
-                // Optional: Archive the report as an artifact
-                // archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+        //         // Optional: Archive the report as an artifact
+        //         archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
                 
-                // Optional: Fail the build if secrets are found
-                def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
-                if (exitCode != '0' && exitCode != '') {
-                    echo "GitLeaks found secrets in the codebase! Check the report for details."
-                    // Uncomment the line below to fail the build
-                    // error "Pipeline aborted due to leaked secrets"
+        //         // Optional: Fail the build if secrets are found
+        //         def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
+        //         if (exitCode != '0' && exitCode != '') {
+        //             echo "GitLeaks found secrets in the codebase! Check the report for details."
+        //             // Uncomment the line below to fail the build
+        //             // error "Pipeline aborted due to leaked secrets"
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        stage('Secret Scan') {
+            steps {
+                script {
+                    def gitleaksConfig = '--config .gitleaks.toml' // Optional: Specify a configuration file
+                    def reportPath = 'gitleaks-report.json'
+
+                    // Run gitleaks and generate a JSON report
+                    def gitleaksCommand = "gitleaks $gitleaksConfig --report-path $reportPath --report-format json ."
+                    try {
+                        sh "${gitleaksCommand}"
+                    } catch (Exception e) {
+                        // Check if the exception was due to gitleaks finding secrets
+                        if (e.getMessage().contains('Leaks found:')) {
+                            error("Gitleaks found secrets! Check ${reportPath} for details.")
+                            // Optionally, you could fail the build here
+                            // currentBuild.result = 'FAILURE'
+                        } else {
+                            // Handle other potential errors
+                            throw e
                         }
                     }
+
+                    // Optionally, process the report (e.g., upload as an artifact)
+                    archiveArtifacts "${reportPath}"
                 }
             }
+        }
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
