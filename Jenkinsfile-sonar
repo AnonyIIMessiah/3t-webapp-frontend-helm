@@ -77,12 +77,13 @@ pipeline {
         //     }
 
         stage('Test') {
-            steps {
-                echo 'Testing...'
+           steps {
+                // The plugin will automatically pick up the SNYK_TOKEN env variable
                 snykSecurity(
-                snykInstallation: 'snyk',
-                snykTokenId: 'SNYK_TOKEN',
-                // place other parameters here
+                    snykInstallation: 'snyk',
+                    // targetFile: 'package.json',
+                    failOnIssues: false,
+                    monitorProjectOnBuild: true
                 )
             }
         }
