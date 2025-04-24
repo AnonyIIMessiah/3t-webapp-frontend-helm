@@ -78,7 +78,7 @@ pipeline {
 
         stage('Snyk SCA') {
             steps {
-                withCredentials([string(credentialsId: 'snyk-api-token', variable: 'SNYK_TOKEN')]) {
+                withCredentials([string(credentialsId: 'SNYK_TOKEN')]) {
                     // Using the Snyk Security plugin with credentials
                     snykSecurity(
                         snykInstallation: 'Snyk',
