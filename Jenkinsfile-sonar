@@ -76,24 +76,16 @@ pipeline {
         //    }
         //     }
 
-        stage('Snyk SCA') {
+        stage('Test') {
             steps {
-                withCredentials([string(credentialsId: 'SNYK_TOKEN')]) {
-                    // Using the Snyk Security plugin with credentials
-                    snykSecurity(
-                        snykInstallation: 'Snyk',
-                        snykTokenId: 'snyk-api-token',
-                        targetFile: 'package.json',
-                        failOnIssues: false,
-                        monitorProjectOnBuild: true
-                    )
-                    
-                    // Or using Snyk CLI directly
-                    // sh 'snyk test --token=${SNYK_TOKEN}'
-                }
+                echo 'Testing...'
+                snykSecurity(
+                snykInstallation: 'snyk',
+                snykTokenId: 'SNYK_TOKEN',
+                // place other parameters here
+                )
             }
         }
-    
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
