@@ -10,7 +10,9 @@ pipeline {
         REACT_APP_API_URL = credentials('REACT_APP_API_URL')
         SONAR_TOKEN = credentials('SONAR_TOKEN')
         SONAR_PROJECT_KEY = "task-1_3t-webapp-frontend"
-        SONAR_ORGANIZATION = "task-1"    
+        SONAR_ORGANIZATION = "task-1"   
+        SNYK_TOKEN=credentials('SNYK_TOKEN')
+
     }
     tools {
     'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
@@ -62,6 +64,16 @@ pipeline {
                         }
                     }
                 }
+            }
+            stage('Snyk Test') {
+           steps {
+               script {
+                   // Run Snyk test
+                   
+                       sh 'snyk test --token=${SNYK_TOKEN}'
+                   
+               }
+           }
             }
         //  stage('SonarCloud Analysis') {
         //     steps {
