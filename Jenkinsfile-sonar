@@ -33,60 +33,36 @@ pipeline {
             }
         }
 
-        // stage('Secret Scanning with GitLeaks') {
-        // steps {
-        //     script {
-        //         sh '''
-        //             echo ${WORKSPACE}
-        //             cd ${WORKSPACE}/frontend
-        //             ls
-        //             docker run --rm \
-        //             -v ${WORKSPACE}/frontend:/code \
-        //             zricethezav/gitleaks:latest \
-        //             detect --source="/code" \
-        //             --report-path=/code/gitleaks-report.json \
-        //             --report-format=json \
-        //             --no-git
-        //             ls -la
-        //         '''
+        stage('Secret Scanning with GitLeaks') {
+        steps {
+            script {
+                sh '''
+                    echo ${WORKSPACE}
+                    cd ${WORKSPACE}/frontend
+                    ls
+                    docker run --rm \
+                    -v ${WORKSPACE}/frontend:/code \
+                    zricethezav/gitleaks:latest \
+                    detect --source="/code" \
+                    --report-path=/code/gitleaks-report.json \
+                    --report-format=json \
+                    --no-git
+                    ls -la
+                '''
                 
-        //         // Optional: Archive the report as an artifact
-        //         archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                // Optional: Archive the report as an artifact
+                archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
                 
-        //         // Optional: Fail the build if secrets are found
-        //         def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
-        //         if (exitCode != '0' && exitCode != '') {
-        //             echo "GitLeaks found secrets in the codebase! Check the report for details."
-        //             // Uncomment the line below to fail the build
-        //             // error "Pipeline aborted due to leaked secrets"
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        stage('Secret Scan') {
-            steps {
-                script {
-                    def gitleaksConfig = '--config .gitleaks.toml'
-                    def reportPath = 'gitleaks-report.json'
-                    def gitleaksImage = 'zricethezav/gitleaks:latest' // Or a specific version
-
-                    try {
-                        sh '''
-                        docker run --rm -v "$(pwd):/repo" ${gitleaksImage} ${gitleaksConfig} --report-path /repo/${reportPath} --report-format json /repo
-                        '''
-                    } catch (Exception e) {
-                        if (e.getMessage().contains('Leaks found:')) {
-                            error("Gitleaks found secrets! Check ${reportPath} for details.")
-                        } else {
-                            throw e
+                // Optional: Fail the build if secrets are found
+                def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
+                if (exitCode != '0' && exitCode != '') {
+                    echo "GitLeaks found secrets in the codebase! Check the report for details."
+                    // Uncomment the line below to fail the build
+                    // error "Pipeline aborted due to leaked secrets"
                         }
                     }
-
-                    archiveArtifacts "${reportPath}"
                 }
             }
-        }
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
