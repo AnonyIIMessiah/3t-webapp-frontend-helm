@@ -189,7 +189,7 @@ stage('Helm Chart Security Scan') {
             sh '''
                 # Scan raw Helm charts
                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -d ./frontend-helm-custom \
+                    -d frontend-helm-custom \
                     --framework helm \
                     --output cli \
                     --output json \
