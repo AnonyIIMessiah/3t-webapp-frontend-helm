@@ -35,13 +35,20 @@ pipeline {
             }
         }
 
+        stage('Installing Dependencies'){
+            steps {
+                dir('frontend') {
+                    script {
+                        // Install dependencies
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
         stage('Secret Scanning with GitLeaks') {
         steps {
             script {
                 sh '''
-                    echo ${WORKSPACE}
-                    cd ${WORKSPACE}/frontend
-                    ls
                     docker run --rm \
                     -v ${WORKSPACE}/frontend:/code \
                     zricethezav/gitleaks:latest \
@@ -49,7 +56,6 @@ pipeline {
                     --report-path=/code/gitleaks-report.json \
                     --report-format=json \
                     --no-git
-                    ls -la
                 '''
                 
                 // Optional: Archive the report as an artifact
@@ -75,7 +81,6 @@ pipeline {
         //        }
         //    }
         //     }
-
         stage('Test') {
            steps {
                 // The plugin will automatically pick up the SNYK_TOKEN env variable
