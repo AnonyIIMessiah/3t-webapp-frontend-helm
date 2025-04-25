@@ -1,0 +1,71 @@
+---
+# Source: frontend-custom/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+    namespace: default
+
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+---
+# Source: frontend-custom/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name: frontend
+  name: frontend
+  labels:
+    app: frontend
+    namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "demoniiexe/microservice-frontend:latest"
+          # image: demoniiexe/microservice-frontend:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 512Mi
+          ports:
+            - containerPort: 80 #only required for documentation purposes
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 80
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 100
+---
+# Source: frontend-custom/templates/hpa-frontend.yaml
+# behavior:
+  #   scaleDown:
+  #     stabilizationWindowSeconds: 60
+  #     policies:
+  #       - type: Pods
+  #         value: 4
+  #         periodSeconds: 60
+  #       - type: Percent
+  #         value: 40
+  #         periodSeconds: 60
+  #     selectPolicy: Max

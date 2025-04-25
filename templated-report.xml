@@ -1,0 +1,892 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="0" failures="17" tests="90" time="0.0">
+	<testsuite disabled="0" errors="0" failures="17" name="kubernetes scan" skipped="0" tests="90" time="0">
+		<properties>
+			<property name="add_check" value="False"/>
+			<property name="file" value="['frontend-templated.yaml']"/>
+			<property name="list" value="False"/>
+			<property name="output" value="['cli', 'junitxml']"/>
+			<property name="output_file_path" value="console,templated-report.xml"/>
+			<property name="output_bc_ids" value="False"/>
+			<property name="include_all_checkov_policies" value="True"/>
+			<property name="quiet" value="False"/>
+			<property name="compact" value="False"/>
+			<property name="framework" value="['all']"/>
+			<property name="skip_framework" value="[]"/>
+			<property name="run_all_external_checks" value="False"/>
+			<property name="soft_fail" value="False"/>
+			<property name="skip_results_upload" value="False"/>
+			<property name="repo_id" value="cli_repo/workdir"/>
+			<property name="branch" value="master"/>
+			<property name="skip_download" value="False"/>
+			<property name="use_enforcement_rules" value="False"/>
+			<property name="download_external_modules" value="False"/>
+			<property name="external_modules_download_path" value=".external_modules"/>
+			<property name="evaluate_variables" value="True"/>
+			<property name="no_cert_verify" value="False"/>
+			<property name="create_baseline" value="False"/>
+			<property name="output_baseline_as_skipped" value="False"/>
+			<property name="secrets_scan_file_type" value="[]"/>
+			<property name="enable_secret_scan_all_files" value="False"/>
+			<property name="block_list_secret_scan" value="[]"/>
+			<property name="summary_position" value="top"/>
+			<property name="skip_resources_without_violations" value="False"/>
+			<property name="deep_analysis" value="False"/>
+			<property name="no_fail_on_crash" value="False"/>
+			<property name="mask" value="defaultdict(&lt;class 'set'&gt;, {})"/>
+			<property name="scan_secrets_history" value="False"/>
+			<property name="secrets_history_timeout" value="12h"/>
+			<property name="custom_tool_name" value="Checkov"/>
+		</properties>
+		<testcase name="[NONE][CKV_K8S_100] Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_114] Ensure that the --profiling argument is set to false" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_95] Ensure that the --request-timeout argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_151] Ensure that the Kubelet only makes use of Strong Cryptographic Ciphers" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_26] Do not specify hostPort unless absolutely necessary" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_149] Ensure that the --rotate-certificates argument is not set to false" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_119] Ensure that the --peer-cert-file and --peer-key-file arguments are set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_115] Ensure that the --bind-address argument is set to 127.0.0.1" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_88] Ensure that the --insecure-port argument is set to 0" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_147] Ensure that the --event-qps argument is set to 0 or a level which ensures appropriate event capture" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_144] Ensure that the --protect-kernel-defaults argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_81] Ensure that the admission control plugin SecurityContextDeny is set if PodSecurityPolicy is not used" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_73] Ensure that the --kubelet-certificate-authority argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_34] Ensure that Tiller (Helm v2) is not deployed" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_85] Ensure that the admission control plugin NodeRestriction is set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_146] Ensure that the --hostname-override argument is not set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_107] Ensure that the --profiling argument is set to false" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_75] Ensure that the --authorization-mode argument includes Node" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_33] Ensure the Kubernetes dashboard is not deployed" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_83] Ensure that the admission control plugin NamespaceLifecycle is set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_106] Ensure that the --terminated-pod-gc-threshold argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_141] Ensure that the --read-only-port argument is set to 0" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_92] Ensure that the --audit-log-maxage argument is set to 30 or as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_74] Ensure that the --authorization-mode argument is not set to AlwaysAllow" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_68] Ensure that the --anonymous-auth argument is set to false" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_70] Ensure that the --token-auth-file argument is not set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_116] Ensure that the --cert-file and --key-file arguments are set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_17] Containers should not share the host process ID namespace" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_86] Ensure that the --insecure-bind-address argument is not set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_102] Ensure that the --etcd-cafile argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_159] Limit the use of git-sync to prevent code injection" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_93] Ensure that the --audit-log-maxbackup argument is set to 10 or as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_15] Image Pull Policy should be Always" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_16] Container should not be privileged" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_25] Minimize the admission of containers with added capability" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_39] Do not use the CAP_SYS_ADMIN linux capability" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_13] Memory limits should be set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_113] Ensure that the --bind-address argument is set to 127.0.0.1" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_96] Ensure that the --service-account-lookup argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_18] Containers should not share the host IPC namespace" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_80] Ensure that the admission control plugin AlwaysPullImages is set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_110] Ensure that the --service-account-private-key-file argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_97] Ensure that the --service-account-key-file argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_118] Ensure that the --auto-tls argument is not set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_145] Ensure that the --make-iptables-util-chains argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_69] Ensure that the --basic-auth-file argument is not set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_91] Ensure that the --audit-log-path argument is set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_19] Containers should not share the host network namespace" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_82] Ensure that the admission control plugin ServiceAccount is set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_138] Ensure that the --anonymous-auth argument is set to false" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_77] Ensure that the --authorization-mode argument includes RBAC" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_105] Ensure that the API Server only makes use of Strong Cryptographic Ciphers" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_112] Ensure that the RotateKubeletServerCertificate argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_108] Ensure that the --use-service-account-credentials argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_89] Ensure that the --secure-port argument is not set to 0" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_71] Ensure that the --kubelet-https argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_148] Ensure that the --tls-cert-file and --tls-private-key-file arguments are set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_35] Prefer using secrets as files over secrets as environment variables" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_79] Ensure that the admission control plugin AlwaysAdmit is not set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_104] Ensure that encryption providers are appropriately configured" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_143] Ensure that the --streaming-connection-idle-timeout argument is not set to 0" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_10] CPU requests should be set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_84] Ensure that the admission control plugin PodSecurityPolicy is set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_111] Ensure that the --root-ca-file argument is set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_117] Ensure that the --client-cert-auth argument is set to true" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_99] Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_12] Memory requests should be set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_72] Ensure that the --kubelet-client-certificate and --kubelet-client-key arguments are set as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_11] CPU limits should be set" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_94] Ensure that the --audit-log-maxsize argument is set to 100 or as appropriate" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_139] Ensure that the --authorization-mode argument is not set to AlwaysAllow" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_90] Ensure that the --profiling argument is set to false" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_27] Do not expose the docker daemon socket to containers" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml"/>
+		<testcase name="[NONE][CKV_K8S_21] The default namespace should not be used" classname="/frontend-templated.yaml.Service.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="The default namespace should not be used">
+Resource: Service.default.frontend
+File: /frontend-templated.yaml: 3-19
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-20
+
+		3  | apiVersion: v1
+		4  | kind: Service
+		5  | metadata:
+		6  |   name: frontend
+		7  |   labels:
+		8  |     app: frontend
+		9  |     namespace: default
+		10 | 
+		11 | spec:
+		12 |   selector:
+		13 |     app: frontend
+		14 |   ports:
+		15 |     - protocol: TCP
+		16 |       port: 80
+		17 |       targetPort: 80
+		18 |   type: ClusterIP
+		19 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_20] Containers should not run with allowPrivilegeEscalation" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Containers should not run with allowPrivilegeEscalation">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-19
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_43] Image should use digest" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Image should use digest">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-39
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_9] Readiness Probe Should be Configured" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Readiness Probe Should be Configured">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-8
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_23] Minimize the admission of root containers" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Minimize the admission of root containers">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-22
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_37] Minimize the admission of containers with capabilities assigned" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Minimize the admission of containers with capabilities assigned">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-34
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_29] Apply security context to your pods and containers" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Apply security context to your pods and containers">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/ensure-securitycontext-is-applied-to-pods-and-containers
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_21] The default namespace should not be used" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="The default namespace should not be used">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-20
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_31] Ensure that the seccomp profile is set to docker/default or runtime/default" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Ensure that the seccomp profile is set to docker/default or runtime/default">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-29
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_30] Apply security context to your containers" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Apply security context to your containers">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-28
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_28] Minimize the admission of containers with the NET_RAW capability" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Minimize the admission of containers with the NET_RAW capability">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-27
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_14] Image Tag should be fixed - not latest or blank" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Image Tag should be fixed - not latest or blank">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-13
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_40] Containers should run as a high UID to avoid host conflict" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Containers should run as a high UID to avoid host conflict">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-37
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_38] Ensure that Service Account Tokens are only mounted where necessary" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Ensure that Service Account Tokens are only mounted where necessary">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-35
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_8] Liveness Probe Should be Configured" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Liveness Probe Should be Configured">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-7
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV_K8S_22] Use read-only filesystem for containers where possible" classname="/frontend-templated.yaml.Deployment.default.frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Use read-only filesystem for containers where possible">
+Resource: Deployment.default.frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-21
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+		<testcase name="[NONE][CKV2_K8S_6] Minimize the admission of pods which lack an associated NetworkPolicy" classname="/frontend-templated.yaml.Pod.default.frontend.app-frontend" file="/frontend-templated.yaml">
+			<failure type="failure" message="Minimize the admission of pods which lack an associated NetworkPolicy">
+Resource: Pod.default.frontend.app-frontend
+File: /frontend-templated.yaml: 21-59
+Guideline: None
+
+		21 | apiVersion: apps/v1
+		22 | kind: Deployment
+		23 | metadata:
+		24 |   # name: frontend
+		25 |   name: frontend
+		26 |   labels:
+		27 |     app: frontend
+		28 |     namespace: default
+		29 | spec:
+		30 |   replicas: 1
+		31 |   selector:
+		32 |     matchLabels:
+		33 |       app: frontend
+		34 |   template:
+		35 |     metadata:
+		36 |       labels:
+		37 |         app: frontend
+		38 |     spec:
+		39 |       containers:
+		40 |         - name: frontend
+		41 |           image: &quot;demoniiexe/microservice-frontend:latest&quot;
+		42 |           # image: demoniiexe/microservice-frontend:latest
+		43 |           imagePullPolicy: Always
+		44 |           resources:
+		45 |             requests:
+		46 |               cpu: 100m
+		47 |               memory: 128Mi
+		48 |             limits:
+		49 |               cpu: 200m
+		50 |               memory: 512Mi
+		51 |           ports:
+		52 |             - containerPort: 80 #only required for documentation purposes
+		53 |           # livenessProbe:
+		54 |           #   httpGet:
+		55 |           #     path: /
+		56 |           #     port: 80
+		57 |           #   initialDelaySeconds: 30
+		58 |           #   periodSeconds: 100
+		59 | ---
+</failure>
+		</testcase>
+	</testsuite>
+</testsuites>

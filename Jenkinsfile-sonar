@@ -181,6 +181,8 @@ stage('Helm Chart Security Scan') {
     steps {
         script {
             // Template your custom Helm chart first
+            sh 'ls -la'
+            sh 'pwd'
             sh 'helm template ./frontend-helm-custom > frontend-templated.yaml'
             
             // Run Checkov against both raw charts and templated output
