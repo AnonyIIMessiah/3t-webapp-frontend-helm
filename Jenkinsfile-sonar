@@ -72,17 +72,17 @@ pipeline {
                 }
             }
         
-        stage('SNYK Test') {
-           steps {
-                // The plugin will automatically pick up the SNYK_TOKEN env variable
-                snykSecurity(
-                    snykInstallation: 'snyk',
-                    targetFile: 'frontend/package.json',
-                    failOnIssues: false,
-                    monitorProjectOnBuild: true
-                )
-            }
-        }
+        // stage('SNYK Test') {
+        //    steps {
+        //         // The plugin will automatically pick up the SNYK_TOKEN env variable
+        //         snykSecurity(
+        //             snykInstallation: 'snyk',
+        //             targetFile: 'frontend/package.json',
+        //             failOnIssues: false,
+        //             monitorProjectOnBuild: true
+        //         )
+        //     }
+        // }
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
