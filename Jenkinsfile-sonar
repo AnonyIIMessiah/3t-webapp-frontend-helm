@@ -35,16 +35,16 @@ pipeline {
             }
         }
 
-        // stage('Installing Dependencies'){
-        //     steps {
-        //         dir('frontend') {
-        //             script {
-        //                 // Install dependencies
-        //                 sh 'npm install'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Installing Dependencies'){
+            steps {
+                dir('frontend') {
+                    script {
+                        // Install dependencies
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
         stage('Secret Scanning with GitLeaks') {
         steps {
             script {
@@ -72,95 +72,95 @@ pipeline {
                 }
             }
         
-        // stage('SNYK Test') {
-        //    steps {
-        //         // The plugin will automatically pick up the SNYK_TOKEN env variable
-        //         snykSecurity(
-        //             snykInstallation: 'snyk',
-        //             targetFile: 'frontend/package.json',
-        //             failOnIssues: false,
-        //             monitorProjectOnBuild: true
-        //         )
-        //     }
-        // }
-        //  stage('SonarCloud Analysis') {
-        //     steps {
-        // withSonarQubeEnv('SonarCloud') {
-        //     sh "${tool 'SonarScanner'}/bin/sonar-scanner \
-        //       -Dsonar.projectKey=task-1_3t-webapp-frontend \
-        //       -Dsonar.organization=task-1 \
-        //       -Dsonar.host.url=https://sonarcloud.io \
-        //       -Dsonar.token=${SONAR_TOKEN} \
-        //       -Dsonar.sources=. \
-        //       -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
-        // }
-        //         // Wait for the quality gate result
-        //         timeout(time: 5, unit: 'MINUTES') {
-        //             // waitForQualityGate abortPipeline: true
-        //             script {
-        //                 def qg = waitForQualityGate()
-        //                     if (qg.status != 'OK') {
-        //                         echo "Quality Gate failed: ${qg.status}"
-        //                         echo "Reason: ${qg.conditions}"
-        //                         currentBuild.result = 'FAILURE'
-        //                         error "Pipeline aborted due to quality gate failure"
-        //             }
-        //         }
-        //     }
-        // }
-        //  }
-        // stage('Build') {
-        //     steps {
-        //         dir('frontend') {
-        //             script {
-        //                 sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
-        //                 sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Install Trivy') {
-        //     steps {
-        //         sh '''
-        //             # Install Trivy (for Debian/Ubuntu)
-        //             wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
-        //             echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
-        //             apt-get update
-        //             apt-get install -y trivy
-        //         '''
-        //     }
-        // }
+        stage('SNYK Test') {
+           steps {
+                // The plugin will automatically pick up the SNYK_TOKEN env variable
+                snykSecurity(
+                    snykInstallation: 'snyk',
+                    targetFile: 'frontend/package.json',
+                    failOnIssues: false,
+                    monitorProjectOnBuild: true
+                )
+            }
+        }
+         stage('SonarCloud Analysis') {
+            steps {
+        withSonarQubeEnv('SonarCloud') {
+            sh "${tool 'SonarScanner'}/bin/sonar-scanner \
+              -Dsonar.projectKey=task-1_3t-webapp-frontend \
+              -Dsonar.organization=task-1 \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.token=${SONAR_TOKEN} \
+              -Dsonar.sources=. \
+              -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
+        }
+                // Wait for the quality gate result
+                timeout(time: 5, unit: 'MINUTES') {
+                    // waitForQualityGate abortPipeline: true
+                    script {
+                        def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                echo "Quality Gate failed: ${qg.status}"
+                                echo "Reason: ${qg.conditions}"
+                                currentBuild.result = 'FAILURE'
+                                error "Pipeline aborted due to quality gate failure"
+                    }
+                }
+            }
+        }
+         }
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    script {
+                        sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
+                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
+                    }
+                }
+            }
+        }
+        stage('Install Trivy') {
+            steps {
+                sh '''
+                    # Install Trivy (for Debian/Ubuntu)
+                    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
+                    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
+                    apt-get update
+                    apt-get install -y trivy
+                '''
+            }
+        }
         
-        // stage('Container Image Scaning using Trivy') {
-        //     steps {
-        //         sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
-        //     }
-        // }
-        // stage('Push') {
-        //     steps {
-        //         script {
-                    
-        //                 // Login to Docker Hub
-        //                 sh 'docker login -u demoniiexe -p $DOCKER_PASS'
-        //                 sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
-                    
-        //         }
-        //     }
-        // }
-        
-//            stage('Scan Container Image') {
-//     steps {
-//         snykSecurity(
-//             snykInstallation: 'snyk',
-//             targetFile: 'frontend/Dockerfile',
-//             projectName: 'microservice-frontend',
-//             additionalArguments: '--docker demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
-//             failOnIssues: false,
-//             monitorProjectOnBuild: true,
-//             severity: 'high'
-//         )
-//     }
-// }
+        stage('Push') {
+            steps {
+                script {
+                    // 
+                        // Login to Docker Hub
+                        sh 'docker login -u demoniiexe -p $DOCKER_PASS'
+                        sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+                    // 
+                }
+            }
+        }
+        stage('Container Image Scaning using Trivy') {
+            steps {
+                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+            }
+        }
+        // 
+           stage('Scan Container Image using snyk') {
+    steps {
+        snykSecurity(
+            snykInstallation: 'snyk',
+            targetFile: 'frontend/Dockerfile',
+            projectName: 'microservice-frontend',
+            additionalArguments: '--docker demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
+            failOnIssues: false,
+            monitorProjectOnBuild: true,
+            severity: 'high'
+        )
+    }
+}
 
 
         // stage('Install Checkov') {
@@ -177,37 +177,37 @@ pipeline {
         // }
 
 
-stage('Helm Chart Security Scan') {
-    steps {
-        script {
-            // Template your custom Helm chart first
-            sh 'helm template ./frontend-helm-custom > frontend-templated.yaml'
+// stage('Helm Chart Security Scan') {
+//     steps {
+//         script {
+//             // Template your custom Helm chart first
+//             sh 'helm template ./frontend-helm-custom > frontend-templated.yaml'
             
-            sh 'ls -la'
-            sh 'pwd'
-            // Run Checkov against both raw charts and templated output
-            sh '''
-                # Scan raw Helm charts
-                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -d /workdir/frontend-helm-custom \
-                    --framework helm \
-                    --output cli \
-                    --output json \
-                    --output-file-path console,helm-report.json
+//             sh 'ls -la'
+//             sh 'pwd'
+//             // Run Checkov against both raw charts and templated output
+//             sh '''
+//                 # Scan raw Helm charts
+//                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+//                     -d ./frontend-helm-custom \
+//                     --framework helm \
+//                     --output cli \
+//                     --output json \
+//                     --output-file-path console,helm-report.json
                     
-                # Scan templated YAML
-                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -f /workdir/frontend-templated.yaml \
-                    --output cli \
-                    --output junitxml \
-                    --output-file-path console,templated-report.xml
-            '''
+//                 # Scan templated YAML
+//                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+//                     -f frontend-templated.yaml \
+//                     --output cli \
+//                     --output junitxml \
+//                     --output-file-path console,templated-report.xml
+//             '''
             
-            junit allowEmptyResults: true, testResults: 'templated-report.xml'
-            archiveArtifacts artifacts: 'helm-report.json,frontend-templated.yaml', allowEmptyArchive: true
-        }
-    }
-}
+//             junit allowEmptyResults: true, testResults: 'templated-report.xml'
+//             archiveArtifacts artifacts: 'helm-report.json,frontend-templated.yaml', allowEmptyArchive: true
+//         }
+//     }
+// }
 
 
         // stage('EKS-setup') {
