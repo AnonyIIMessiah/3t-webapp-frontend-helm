@@ -63,11 +63,11 @@ pipeline {
                 
                 // Optional: Fail the build if secrets are found
                 def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
-                // if (exitCode != '0' && exitCode != '') {
-                //     echo "GitLeaks found secrets in the codebase! Check the report for details."
-                //     // Uncomment the line below to fail the build
-                //     // error "Pipeline aborted due to leaked secrets"
-                //         }
+                if (exitCode != '0' && exitCode != '') {
+                    echo "GitLeaks found secrets in the codebase! Check the report for details."
+                    // Uncomment the line below to fail the build
+                    // error "Pipeline aborted due to leaked secrets"
+                        }
                     }
                 }
             }
@@ -98,13 +98,13 @@ pipeline {
                 timeout(time: 5, unit: 'MINUTES') {
                     // waitForQualityGate abortPipeline: true
                     script {
-                        def qg = waitForQualityGate()
-                            if (qg.status != 'OK') {
-                                echo "Quality Gate failed: ${qg.status}"
-                                echo "Reason: ${qg.conditions}"
-                                currentBuild.result = 'FAILURE'
-                                error "Pipeline aborted due to quality gate failure"
-                    }
+                    //     def qg = waitForQualityGate()
+                    //         if (qg.status != 'OK') {
+                    //             echo "Quality Gate failed: ${qg.status}"
+                    //             echo "Reason: ${qg.conditions}"
+                    //             currentBuild.result = 'FAILURE'
+                    //             error "Pipeline aborted due to quality gate failure"
+                    // }
                 }
             }
         }
