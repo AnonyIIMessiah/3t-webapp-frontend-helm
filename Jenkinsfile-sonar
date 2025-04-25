@@ -133,7 +133,7 @@ pipeline {
         
         stage('Scan Image') {
             steps {
-                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}'
+                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
             }
         }
         // stage('Push') {
