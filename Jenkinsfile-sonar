@@ -72,17 +72,17 @@ pipeline {
                 }
             }
         
-        // stage('SNYK Test') {
-        //    steps {
-        //         // The plugin will automatically pick up the SNYK_TOKEN env variable
-        //         snykSecurity(
-        //             snykInstallation: 'snyk',
-        //             targetFile: 'frontend/package.json',
-        //             failOnIssues: false,
-        //             monitorProjectOnBuild: true
-        //         )
-        //     }
-        // }
+        stage('SNYK Test') {
+           steps {
+                // The plugin will automatically pick up the SNYK_TOKEN env variable
+                snykSecurity(
+                    snykInstallation: 'snyk',
+                    targetFile: 'frontend/package.json',
+                    failOnIssues: false,
+                    monitorProjectOnBuild: true
+                )
+            }
+        }
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
@@ -119,23 +119,23 @@ pipeline {
                 }
             }
         }
-        stage('Install Trivy') {
-            steps {
-                sh '''
-                    # Install Trivy (for Debian/Ubuntu)
-                    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
-                    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
-                    apt-get update
-                    apt-get install -y trivy
-                '''
-            }
-        }
+        // stage('Install Trivy') {
+        //     steps {
+        //         sh '''
+        //             # Install Trivy (for Debian/Ubuntu)
+        //             wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
+        //             echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
+        //             apt-get update
+        //             apt-get install -y trivy
+        //         '''
+        //     }
+        // }
         
-        stage('Scan Image') {
-            steps {
-                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
-            }
-        }
+        // stage('Container Image Scaning using Trivy') {
+        //     steps {
+        //         sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+        //     }
+        // }
         // stage('Push') {
         //     steps {
         //         script {
@@ -147,6 +147,17 @@ pipeline {
         //         }
         //     }
         // }
+        stage('Scan Container Image') {
+            steps {
+                snykSecurity(
+                    snykInstallation: 'snyk',  // The name you gave your Snyk installation
+                    targetFile: 'frontend/Dockerfile',
+                    dockerImage: 'demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
+                    failOnIssues: false,  // Set to true to fail build if vulnerabilities found
+                    monitorProjectOnBuild: true,
+                    severity: 'high'
+                )
+            }
         // stage('EKS-setup') {
         //     steps {
         //         script {
