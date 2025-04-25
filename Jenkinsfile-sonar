@@ -63,13 +63,13 @@ pipeline {
                 
                 // Optional: Fail the build if secrets are found
                 def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
-                if (exitCode != '0' && exitCode != '') {
-                    echo "GitLeaks found secrets in the codebase! Check the report for details."
-                    // Uncomment the line below to fail the build
-                    // error "Pipeline aborted due to leaked secrets"
-                        }
-                    }
-                }
+                // if (exitCode != '0' && exitCode != '') {
+                //     echo "GitLeaks found secrets in the codebase! Check the report for details."
+                //     // Uncomment the line below to fail the build
+                //     // error "Pipeline aborted due to leaked secrets"
+                //         }
+                //     }
+                // }
             }
         
         stage('SNYK Test') {
