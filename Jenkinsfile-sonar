@@ -109,16 +109,16 @@ pipeline {
         //     }
         // }
         //  }
-        stage('Build') {
-            steps {
-                dir('frontend') {
-                    script {
-                        sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
-                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
-                    }
-                }
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         dir('frontend') {
+        //             script {
+        //                 sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
+        //                 sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
+        //             }
+        //         }
+        //     }
+        // }
         // stage('Install Trivy') {
         //     steps {
         //         sh '''
@@ -148,20 +148,66 @@ pipeline {
         //     }
         // }
         
-           stage('Scan Container Image') {
+//            stage('Scan Container Image') {
+//     steps {
+//         snykSecurity(
+//             snykInstallation: 'snyk',
+//             targetFile: 'frontend/Dockerfile',
+//             projectName: 'microservice-frontend',
+//             additionalArguments: '--docker demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
+//             failOnIssues: false,
+//             monitorProjectOnBuild: true,
+//             severity: 'high'
+//         )
+//     }
+// }
+
+
+        // stage('Install Checkov') {
+        //     steps {
+        //         sh 'pip install checkov'
+        //     }
+        // }
+        
+        // stage('Scan Helm Charts') {
+        //     steps {
+        //         sh 'checkov -d ./helm-charts --framework helm --output cli --output junitxml --output-file-path console,checkov-report.xml'
+        //         junit 'checkov-report.xml'
+        //     }
+        // }
+
+
+stage('Helm Chart Security Scan') {
     steps {
-        snykSecurity(
-            snykInstallation: 'snyk',
-            targetFile: 'frontend/Dockerfile',
-            projectName: 'microservice-frontend',
-            additionalArguments: '--docker demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
-            failOnIssues: false,
-            monitorProjectOnBuild: true,
-            severity: 'high'
-        )
+        script {
+            // Template your custom Helm chart first
+            sh 'helm template ./frontend-helm > frontend-templated.yaml'
+            
+            // Run Checkov against both raw charts and templated output
+            sh '''
+                # Scan raw Helm charts
+                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+                    -d ./frontend-helm \
+                    --framework helm \
+                    --output cli \
+                    --output json \
+                    --output-file-path console,helm-report.json
+                    
+                # Scan templated YAML
+                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+                    -f frontend-templated.yaml \
+                    --output cli \
+                    --output junitxml \
+                    --output-file-path console,templated-report.xml
+            '''
+            
+            junit allowEmptyResults: true, testResults: 'templated-report.xml'
+            archiveArtifacts artifacts: 'helm-report.json,frontend-templated.yaml', allowEmptyArchive: true
+        }
     }
 }
-        
+
+
         // stage('EKS-setup') {
         //     steps {
         //         script {
