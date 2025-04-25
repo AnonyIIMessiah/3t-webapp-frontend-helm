@@ -189,7 +189,7 @@ stage('Helm Chart Security Scan') {
             sh '''
                 # Scan raw Helm charts
                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -d frontend-helm-custom \
+                    -d /workdir/frontend-helm-custom \
                     --framework helm \
                     --output cli \
                     --output json \
@@ -197,7 +197,7 @@ stage('Helm Chart Security Scan') {
                     
                 # Scan templated YAML
                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -f frontend-templated.yaml \
+                    -f /workdir/frontend-templated.yaml \
                     --output cli \
                     --output junitxml \
                     --output-file-path console,templated-report.xml
