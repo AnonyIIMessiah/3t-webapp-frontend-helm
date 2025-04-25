@@ -68,8 +68,8 @@ pipeline {
                 //     // Uncomment the line below to fail the build
                 //     // error "Pipeline aborted due to leaked secrets"
                 //         }
-                //     }
-                // }
+                    }
+                }
             }
         
         stage('SNYK Test') {
