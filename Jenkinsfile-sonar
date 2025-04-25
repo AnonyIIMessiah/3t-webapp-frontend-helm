@@ -158,6 +158,7 @@ pipeline {
                     severity: 'high'
                 )
             }
+        }
         // stage('EKS-setup') {
         //     steps {
         //         script {
