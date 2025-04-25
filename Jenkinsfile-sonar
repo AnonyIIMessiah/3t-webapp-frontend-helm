@@ -35,16 +35,16 @@ pipeline {
             }
         }
 
-        stage('Installing Dependencies'){
-            steps {
-                dir('frontend') {
-                    script {
-                        // Install dependencies
-                        sh 'npm install'
-                    }
-                }
-            }
-        }
+        // stage('Installing Dependencies'){
+        //     steps {
+        //         dir('frontend') {
+        //             script {
+        //                 // Install dependencies
+        //                 sh 'npm install'
+        //             }
+        //         }
+        //     }
+        // }
         stage('Secret Scanning with GitLeaks') {
         steps {
             script {
@@ -71,27 +71,18 @@ pipeline {
                     }
                 }
             }
-        //     stage('Snyk Test') {
+        
+        // stage('SNYK Test') {
         //    steps {
-        //        script {
-        //            // Run Snyk test
-                   
-        //                sh 'snyk test --token=${SNYK_TOKEN}'
-                   
-        //        }
-        //    }
+        //         // The plugin will automatically pick up the SNYK_TOKEN env variable
+        //         snykSecurity(
+        //             snykInstallation: 'snyk',
+        //             targetFile: 'frontend/package.json',
+        //             failOnIssues: false,
+        //             monitorProjectOnBuild: true
+        //         )
         //     }
-        stage('Test') {
-           steps {
-                // The plugin will automatically pick up the SNYK_TOKEN env variable
-                snykSecurity(
-                    snykInstallation: 'snyk',
-                    targetFile: 'frontend/package.json',
-                    failOnIssues: false,
-                    monitorProjectOnBuild: true
-                )
-            }
-        }
+        // }
         //  stage('SonarCloud Analysis') {
         //     steps {
         // withSonarQubeEnv('SonarCloud') {
@@ -118,16 +109,33 @@ pipeline {
         //     }
         // }
         //  }
-        // stage('Build') {
-        //     steps {
-        //         dir('frontend') {
-        //             script {
-        //                 sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
-        //                 sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    script {
+                        sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
+                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
+                    }
+                }
+            }
+        }
+        stage('Install Trivy') {
+            steps {
+                sh '''
+                    # Install Trivy (for Debian/Ubuntu)
+                    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
+                    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
+                    apt-get update
+                    apt-get install -y trivy
+                '''
+            }
+        }
+        
+        stage('Scan Image') {
+            steps {
+                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}'
+            }
+        }
         // stage('Push') {
         //     steps {
         //         script {
