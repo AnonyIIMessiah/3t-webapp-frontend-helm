@@ -12,6 +12,8 @@ pipeline {
         SONAR_PROJECT_KEY = "task-1_3t-webapp-frontend"
         SONAR_ORGANIZATION = "task-1"   
         SNYK_TOKEN=credentials('SNYK_TOKEN')
+        FAIL_ON_CRITICAL = 'false'  // Set to 'false' if you want to only warn even on critical
+
 
     }
     tools {
@@ -198,9 +200,7 @@ pipeline {
 //         )
 //     }
 // }
-environment {
-        FAIL_ON_CRITICAL = 'false'  // Set to 'false' if you want to only warn even on critical
-    }
+
 
 
         stage('Kube-Linter Scan') {
