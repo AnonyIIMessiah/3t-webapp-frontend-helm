@@ -216,20 +216,20 @@ pipeline {
             }
         }
 stage('Kube-Score Scan') {
-    steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-            sh '''
-            curl -Lo kube-score.tar.gz https://github.com/zegl/kube-score/releases/download/v1.18.0/kube-score_1.18.0_linux_amd64.tar.gz
-tar -xzf kube-score.tar.gz
-chmod +x kube-score
-./kube-score version
-./kube-score score frontend-helm-custom/
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh '''
+                        # Install kube-score if not already
+                        curl -Lo kube-score.tar.gz https://github.com/zegl/kube-score/releases/download/v1.18.0/kube-score_1.18.0_linux_amd64.tar.gz
+                        tar -xzf kube-score.tar.gz
+                        chmod +x kube-score
 
-
-            '''
+                        # Scan the Helm chart
+                        helm template ./frontend-helm-custom | ./kube-score score -
+                    '''
+                }
+            }
         }
-    }
-}
 
 stage('Terrascan Scan') {
     steps {
