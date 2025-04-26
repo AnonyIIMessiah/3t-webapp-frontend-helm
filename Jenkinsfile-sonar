@@ -225,6 +225,7 @@ chmod +x kube-score
 ./kube-score version
 ./kube-score score frontend-helm-custom/
 
+
             '''
         }
     }
