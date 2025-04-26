@@ -215,12 +215,11 @@ pipeline {
                 }
             }
         }
-
-        stage('Kube-Score Scan') {
+stage('Kube-Score Scan') {
     steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
             sh '''
-            curl -Lo kube-score https://github.com/zegl/kube-score/releases/latest/download/kube-score-linux-amd64
+            curl -Lo kube-score https://github.com/zegl/kube-score/releases/download/v1.18.0/kube-score-linux-amd64
             chmod +x kube-score
             ./kube-score score frontend-helm-custom/
             '''
@@ -232,13 +231,15 @@ stage('Terrascan Scan') {
     steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
             sh '''
-            curl -Lo terrascan https://github.com/tenable/terrascan/releases/latest/download/terrascan_linux_amd64
+            curl -Lo terrascan.tar.gz https://github.com/tenable/terrascan/releases/download/v1.18.3/terrascan_1.18.3_Linux_x86_64.tar.gz
+            tar -xzf terrascan.tar.gz terrascan
             chmod +x terrascan
-            ./terrascan scan -d frontend-helm-custom
+            ./terrascan scan -d frontend-helm-custom/
             '''
         }
     }
 }
+
 
         stage('Trivy Scan') {
             steps {
