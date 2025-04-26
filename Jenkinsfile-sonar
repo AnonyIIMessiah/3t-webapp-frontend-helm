@@ -204,10 +204,12 @@ pipeline {
     steps {
     
             sh '''
-    curl -L https://github.com/bridgecrewio/checkov/releases/latest/download/checkov-linux-amd64 --output checkov
+    curl -L https://github.com/bridgecrewio/checkov/releases/download/3.2.408/checkov_linux_3.2.408 --output checkov
     chmod +x checkov
     ./checkov --version
+    ./checkov -d frontend-helm-custom --framework helm --output json --output-file-path console,checkov-helm-report.json
 '''
+
 
     }
 }
