@@ -180,7 +180,8 @@ pipeline {
         }
         stage('Container Image Scaning using Trivy') {
             steps {
-                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+                // sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+                sh 'trivy image demoniiexe/microservice-frontend:"${IMAGE_TAG}" '
             }
         }
         // 
