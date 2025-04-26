@@ -200,11 +200,45 @@ pipeline {
 // }
 
 
-        // stage('Install Checkov') {
-        //     steps {
-        //         sh 'pip install checkov'
-        //     }
-        // }
+        stage('Install Checkov') {
+            steps {
+                sh ''' 
+                    # Install Checkov (for Debian/Ubuntu)
+                    apt-get update
+                    apt-get install -y python3-pip
+                    pip3 install checkov
+                '''
+            }
+        }
+        stage('Helm Chart Security Scan') {
+    steps {
+        script {
+            // Ensure Checkov is installed
+            sh 'checkov --version'
+            
+            // Run Checkov on the frontend-helm-custom directory
+            sh ''' 
+                checkov -d ./frontend-helm-custom \
+                --framework helm \
+                --output cli \
+                --output json \
+                --output-file-path console,checkov-helm-report.json
+            '''
+        }
+    }
+}
+        stage('Checkov Report') {
+            steps {
+                script {
+                    // Archive the Checkov report
+                    archiveArtifacts artifacts: 'checkov-helm-report.json', allowEmptyArchive: true
+                    
+                    // Publish JUnit results (if applicable)
+                    junit allowEmptyResults: true, testResults: 'checkov-helm-report.json'
+                }
+            }
+        }
+
         
         // stage('Scan Helm Charts') {
         //     steps {
@@ -213,50 +247,50 @@ pipeline {
         //     }
         // }
 
-stage('Scan Helm Charts with Checkov') {
-    steps {
-        script {
-            // Template your Helm chart (render to Kubernetes YAML)
-            sh 'helm template frontend-helm-custom > frontend-templated.yaml'
+// stage('Scan Helm Charts with Checkov') {
+//     steps {
+//         script {
+//             // Template your Helm chart (render to Kubernetes YAML)
+//             sh 'helm template frontend-helm-custom > frontend-templated.yaml'
 
-            // (Optional) List files for debug
-            sh 'ls -la'
+//             // (Optional) List files for debug
+//             sh 'ls -la'
 
-            // Scan both raw Helm and rendered manifests
-            // Scan raw Helm charts
-           sh '''
-    docker run --rm --privileged \
-    -v $(pwd):/workdir \
-    -w /workdir \
-    bridgecrew/checkov:latest \
-    -d /workdir/frontend-helm-custom \
-    --framework helm \
-    --output json \
-    --output-file-path console,checkov-helm-report.json
-'''
-
-
-            // Scan rendered YAML
-           sh '''
-    docker run --rm --privileged \
-    -v $(pwd):/workdir \
-    -w /workdir \
-    bridgecrew/checkov:latest \
-    -f /workdir/frontend-templated.yaml \
-    --framework kubernetes \
-    --output json \
-    --output-file-path console,checkov-templated-report.json
-'''
+//             // Scan both raw Helm and rendered manifests
+//             // Scan raw Helm charts
+//            sh '''
+//     docker run --rm --privileged \
+//     -v $(pwd):/workdir \
+//     -w /workdir \
+//     bridgecrew/checkov:latest \
+//     -d /workdir/frontend-helm-custom \
+//     --framework helm \
+//     --output json \
+//     --output-file-path console,checkov-helm-report.json
+// '''
 
 
-            // Archive the reports
-            archiveArtifacts artifacts: 'checkov-helm-report.json,checkov-templated-report.xml,frontend-templated.yaml', allowEmptyArchive: true
+//             // Scan rendered YAML
+//            sh '''
+//     docker run --rm --privileged \
+//     -v $(pwd):/workdir \
+//     -w /workdir \
+//     bridgecrew/checkov:latest \
+//     -f /workdir/frontend-templated.yaml \
+//     --framework kubernetes \
+//     --output json \
+//     --output-file-path console,checkov-templated-report.json
+// '''
 
-            // Publish JUnit results (from templated YAML scan)
-            junit allowEmptyResults: true, testResults: 'checkov-templated-report.xml'
-        }
-    }
-}
+
+//             // Archive the reports
+//             archiveArtifacts artifacts: 'checkov-helm-report.json,checkov-templated-report.xml,frontend-templated.yaml', allowEmptyArchive: true
+
+//             // Publish JUnit results (from templated YAML scan)
+//             junit allowEmptyResults: true, testResults: 'checkov-templated-report.xml'
+//         }
+//     }
+// }
 
 
         // stage('EKS-setup') {
