@@ -213,38 +213,42 @@ pipeline {
         //     }
         // }
 
+stage('Scan Helm Charts with Checkov') {
+    steps {
+        script {
+            // Template your Helm chart (render to Kubernetes YAML)
+            sh 'helm template frontend-helm-custom > frontend-templated.yaml'
 
-// stage('Helm Chart Security Scan') {
-//     steps {
-//         script {
-//             // Template your custom Helm chart first
-//             sh 'helm template ./frontend-helm-custom > frontend-templated.yaml'
-            
-//             sh 'ls -la'
-//             sh 'pwd'
-//             // Run Checkov against both raw charts and templated output
-//             sh '''
-//                 # Scan raw Helm charts
-//                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-//                     -d ./frontend-helm-custom \
-//                     --framework helm \
-//                     --output cli \
-//                     --output json \
-//                     --output-file-path console,helm-report.json
-                    
-//                 # Scan templated YAML
-//                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-//                     -f frontend-templated.yaml \
-//                     --output cli \
-//                     --output junitxml \
-//                     --output-file-path console,templated-report.xml
-//             '''
-            
-//             junit allowEmptyResults: true, testResults: 'templated-report.xml'
-//             archiveArtifacts artifacts: 'helm-report.json,frontend-templated.yaml', allowEmptyArchive: true
-//         }
-//     }
-// }
+            // (Optional) List files for debug
+            sh 'ls -la'
+
+            // Scan both raw Helm and rendered manifests
+            sh '''
+                # Scan raw Helm charts directly
+                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+                    -d ./frontend-helm-custom \
+                    --framework helm \
+                    --output cli \
+                    --output json \
+                    --output-file-path console,checkov-helm-report.json
+
+                # Scan the rendered YAML output
+                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+                    -f frontend-templated.yaml \
+                    --framework kubernetes \
+                    --output cli \
+                    --output junitxml \
+                    --output-file-path console,checkov-templated-report.xml
+            '''
+
+            // Archive the reports
+            archiveArtifacts artifacts: 'checkov-helm-report.json,checkov-templated-report.xml,frontend-templated.yaml', allowEmptyArchive: true
+
+            // Publish JUnit results (from templated YAML scan)
+            junit allowEmptyResults: true, testResults: 'checkov-templated-report.xml'
+        }
+    }
+}
 
 
         // stage('EKS-setup') {
