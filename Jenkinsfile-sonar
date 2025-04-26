@@ -47,33 +47,67 @@ pipeline {
                 }
             }
         }
-        stage('Secret Scanning with GitLeaks') {
-        steps {
-            script {
-                sh '''
-                    docker run --rm \
-                    -v ${WORKSPACE}/frontend:/code \
-                    zricethezav/gitleaks:latest \
-                    detect --source="/code" \
-                    --report-path=/code/gitleaks-report.json \
-                    --report-format=json \
-                    --no-git
-                '''
+        // stage('Secret Scanning with GitLeaks') {
+        // steps {
+        //     script {
+        //         sh '''
+        //             docker run --rm \
+        //             -v ${WORKSPACE}/frontend:/code \
+        //             zricethezav/gitleaks:latest \
+        //             detect --source="/code" \
+        //             --report-path=/code/gitleaks-report.json \
+        //             --report-format=json \
+        //             --no-git
+        //         '''
                 
-                // Optional: Archive the report as an artifact
-                archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+        //         // Optional: Archive the report as an artifact
+        //         archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
                 
-                // Optional: Fail the build if secrets are found
-                def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
-                if (exitCode != '0' && exitCode != '') {
-                    echo "GitLeaks found secrets in the codebase! Check the report for details."
-                    // Uncomment the line below to fail the build
-                    // error "Pipeline aborted due to leaked secrets"
+        //         // Optional: Fail the build if secrets are found
+        //         def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
+        //         if (exitCode != '0' && exitCode != '') {
+        //             echo "GitLeaks found secrets in the codebase! Check the report for details."
+        //             // Uncomment the line below to fail the build
+        //             // error "Pipeline aborted due to leaked secrets"
+        //                 }
+        //             }
+        //         }
+        //     }
+        
+            stage('Secret Scanning with GitLeaks') {
+                steps {
+                    script {
+                        // Run GitLeaks scan
+                        sh '''
+                            docker run --rm \
+                            -v ${WORKSPACE}:/code \
+                            zricethezav/gitleaks:latest \
+                            detect --source="/code" \
+                            --report-path=/code/gitleaks-report.json \
+                            --report-format=json \
+                            --no-git
+                        '''
+                        
+                        // Archive the report as an artifact with correct path
+                        archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                        
+                        // Better way to check if leaks were found
+                        def leaksFound = sh(
+                            script: 'if [ -s gitleaks-report.json ] && [ "$(cat gitleaks-report.json)" != "[]" ]; then echo "true"; else echo "false"; fi',
+                            returnStdout: true
+                        ).trim()
+                        
+                        if (leaksFound == "true") {
+                            echo "GitLeaks found secrets in the codebase! Check the report for details."
+                            // Uncomment to fail the build if you want to enforce secret scanning
+                            // error "Pipeline aborted due to leaked secrets"
+                        } else {
+                            echo "No leaks found by GitLeaks."
                         }
                     }
                 }
             }
-        
+
         stage('SNYK Test') {
            steps {
                 // The plugin will automatically pick up the SNYK_TOKEN env variable

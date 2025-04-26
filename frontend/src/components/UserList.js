@@ -23,7 +23,7 @@ function UserList() {
         setLoading(false);
       });
   };
-
+  const password = "12345678" 
   const addUser = () => {
     // Generate a unique ID using uuid
     const newUserId = uuidv4();
