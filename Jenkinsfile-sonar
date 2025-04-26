@@ -206,7 +206,10 @@ pipeline {
                     # Install Checkov (for Debian/Ubuntu)
                     apt-get update
                     apt-get install -y python3-pip
-                    pip3 install checkov
+                    python3 -m venv checkov-venv
+                    source checkov-venv/bin/activate
+                    pip install --upgrade pip
+                    pip install checkov
                 '''
             }
         }
@@ -214,6 +217,7 @@ pipeline {
     steps {
         script {
             // Ensure Checkov is installed
+            sh ' source checkov-venv/bin/activate'
             sh 'checkov --version'
             
             // Run Checkov on the frontend-helm-custom directory
