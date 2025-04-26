@@ -137,7 +137,7 @@ pipeline {
                         def qg = waitForQualityGate()
                             if (qg.status != 'OK') {
                                 echo "Quality Gate failed: ${qg.status}"
-                                echo "Reason: ${qg.conditions}"
+                                // echo "Reason: ${qg.conditions}"
                                 currentBuild.result = 'FAILURE'
                                 error "Pipeline aborted due to quality gate failure"
                     }
