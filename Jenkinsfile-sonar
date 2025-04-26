@@ -17,7 +17,7 @@ pipeline {
     tools {
     'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
 }
-    // stages {
+    stages {
     //     stage('Preparation') {
     //         steps {
     //             script {
