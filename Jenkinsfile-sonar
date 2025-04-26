@@ -17,17 +17,17 @@ pipeline {
     tools {
     'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
 }
-    stages {
-        stage('Preparation') {
-            steps {
-                script {
+    // stages {
+    //     stage('Preparation') {
+    //         steps {
+    //             script {
                     // Clean workspace before starting
 
                     // sh 'apt-get update && apt-get install -y docker.io'
-                    
-                }
-            }
-        }
+
+        //         }
+        //     }
+        // }
 
         stage('Checkout') {
             steps {
