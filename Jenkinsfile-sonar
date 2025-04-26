@@ -202,7 +202,7 @@ environment {
         FAIL_ON_CRITICAL = 'false'  // Set to 'false' if you want to only warn even on critical
     }
 
-    stages {
+
         stage('Kube-Linter Scan') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
@@ -251,7 +251,7 @@ environment {
                 }
             }
         }
-    }
+    
         // stage('Scan Helm Charts') {
         //     steps {
         //         sh 'checkov -d ./helm-charts --framework helm --output cli --output junitxml --output-file-path console,checkov-report.xml'
