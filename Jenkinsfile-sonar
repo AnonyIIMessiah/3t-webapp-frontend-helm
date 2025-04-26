@@ -223,23 +223,24 @@ stage('Scan Helm Charts with Checkov') {
             sh 'ls -la'
 
             // Scan both raw Helm and rendered manifests
+            // Scan raw Helm charts
             sh '''
-                # Scan raw Helm charts directly
                 docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -d ./frontend-helm-custom \
+                    -d /workdir/frontend-helm-custom \
                     --framework helm \
-                    --output cli \
                     --output json \
                     --output-file-path console,checkov-helm-report.json
-
-                # Scan the rendered YAML output
-                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
-                    -f frontend-templated.yaml \
-                    --framework kubernetes \
-                    --output cli \
-                    --output junitxml \
-                    --output-file-path console,checkov-templated-report.xml
             '''
+
+            // Scan rendered YAML
+            sh '''
+                docker run --rm -v $(pwd):/workdir -w /workdir bridgecrew/checkov:latest \
+                    -f /workdir/frontend-templated.yaml \
+                    --framework kubernetes \
+                    --output json \
+                    --output-file-path console,checkov-templated-report.json
+            '''
+
 
             // Archive the reports
             archiveArtifacts artifacts: 'checkov-helm-report.json,checkov-templated-report.xml,frontend-templated.yaml', allowEmptyArchive: true
