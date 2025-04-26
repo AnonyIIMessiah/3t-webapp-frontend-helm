@@ -22,7 +22,9 @@ pipeline {
             steps {
                 script {
                     // Clean workspace before starting
-                    sh 'apt-get update && apt-get install -y docker.io'
+
+                    // sh 'apt-get update && apt-get install -y docker.io'
+                    
                 }
             }
         }
