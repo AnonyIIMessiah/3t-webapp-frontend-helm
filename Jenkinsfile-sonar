@@ -219,9 +219,12 @@ stage('Kube-Score Scan') {
     steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
             sh '''
-            curl -Lo kube-score https://github.com/zegl/kube-score/releases/download/v1.18.0/kube-score-linux-amd64
-            chmod +x kube-score
-            ./kube-score score frontend-helm-custom/
+            curl -Lo kube-score.tar.gz https://github.com/zegl/kube-score/releases/download/v1.18.0/kube-score_1.18.0_linux_amd64.tar.gz
+tar -xzf kube-score.tar.gz
+chmod +x kube-score
+./kube-score version
+./kube-score score frontend-helm-custom/
+
             '''
         }
     }
