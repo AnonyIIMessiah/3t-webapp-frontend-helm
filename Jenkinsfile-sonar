@@ -210,8 +210,7 @@ stage('Download Scanners') {
         curl -Lo kube-score https://github.com/zegl/kube-score/releases/latest/download/kube-score-linux-amd64
         chmod +x kube-score
 
-        curl -Lo trivy.tar.gz https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.tar.gz
-        tar -zxvf trivy.tar.gz
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b .
         chmod +x trivy
         '''
     }
