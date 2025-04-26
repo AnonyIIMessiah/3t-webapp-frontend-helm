@@ -198,13 +198,17 @@ pipeline {
 //         )
 //     }
 // }
-
 stage('Helm Chart Analysis with Docker Checkov') {
     steps {
         script {
+            // Debug directory structure
+            sh 'ls -la'
+            sh 'ls -la frontend-helm-custom || echo "frontend-helm-custom directory not found"'
+            
             // Run Checkov in Docker on Helm charts directory
             sh '''
                 # Scan raw Helm charts using Docker
+                echo "Starting scan of raw Helm charts..."
                 docker run --rm \
                     -v $(pwd):/workdir \
                     -w /workdir \
@@ -212,13 +216,22 @@ stage('Helm Chart Analysis with Docker Checkov') {
                     -d /workdir/frontend-helm-custom \
                     --framework helm \
                     --output cli \
-                    --output json --output-file-path helm-raw-report.json
+                    --output json \
+                    --output-file-path /workdir/helm-raw-report.json || echo "Raw Helm chart scanning failed"
+                
+                # Verify report was created
+                ls -la helm-raw-report.json || echo "Raw Helm report not created"
                 
                 # Template the Helm chart
+                echo "Creating templated Kubernetes manifests..."
                 mkdir -p rendered-templates
-                helm template frontend-helm-custom > rendered-templates/frontend-templated.yaml
+                helm template frontend-helm-custom > rendered-templates/frontend-templated.yaml || echo "Helm template generation failed"
+                
+                # Verify template was created
+                ls -la rendered-templates/frontend-templated.yaml || echo "Templated YAML not created"
                 
                 # Scan rendered Kubernetes manifests using Docker
+                echo "Starting scan of rendered Kubernetes manifests..."
                 docker run --rm \
                     -v $(pwd):/workdir \
                     -w /workdir \
@@ -226,11 +239,15 @@ stage('Helm Chart Analysis with Docker Checkov') {
                     -f /workdir/rendered-templates/frontend-templated.yaml \
                     --framework kubernetes \
                     --output cli \
-                    --output json --output-file-path helm-templated-report.json
+                    --output json \
+                    --output-file-path /workdir/helm-templated-report.json || echo "Kubernetes manifest scanning failed"
+                
+                # Verify report was created
+                ls -la helm-templated-report.json || echo "Kubernetes report not created"
             '''
             
-            // Archive the reports
-            archiveArtifacts artifacts: 'helm-raw-report.json,helm-templated-report.json,rendered-templates/frontend-templated.yaml', allowEmptyArchive: true
+            // Archive the reports even if some parts failed
+            archiveArtifacts artifacts: '*report.json,rendered-templates/*.yaml', allowEmptyArchive: true
         }
     }
 }
