@@ -202,12 +202,13 @@ pipeline {
 
         stage('Install Checkov Binary') {
     steps {
-        sh '''
-            curl -L https://github.com/bridgecrewio/checkov/releases/latest/download/checkov-linux-arm64 --output checkov
-            chmod +x checkov
-            ls -la
-            ./checkov --version
-        '''
+    
+            sh '''
+    curl -L https://github.com/bridgecrewio/checkov/releases/latest/download/checkov-linux-amd64 --output checkov
+    chmod +x checkov
+    ./checkov --version
+'''
+
     }
 }
 
