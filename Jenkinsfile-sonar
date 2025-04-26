@@ -200,40 +200,106 @@ pipeline {
 // }
 
 
-        stage('Install Checkov Binary') {
-    steps {
-    
-            sh '''
-    curl -L https://github.com/bridgecrewio/checkov/releases/download/3.2.408/checkov_linux_3.2.408 --output checkov
-    chmod +x checkov
-    ./checkov --version
-    ./checkov -d frontend-helm-custom --framework helm --output json --output-file-path console,checkov-helm-report.json
-'''
+        spipeline {
+    agent any
 
-
+    triggers {
+        pollSCM('* * * * *')
     }
-}
-
-       stage('Run Checkov on Helm Charts') {
-    steps {
-        sh '''
-            ./checkov -d ./frontend-helm-custom --framework helm --output cli --output json --output-file-path checkov-helm-report.json
-        '''
+    environment {
+        DOCKER_PASS = credentials('DOCKER_PASS')
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        REACT_APP_API_URL = credentials('REACT_APP_API_URL')
+        SONAR_TOKEN = credentials('SONAR_TOKEN')
+        SONAR_PROJECT_KEY = "task-1_3t-webapp-frontend"
+        SONAR_ORGANIZATION = "task-1"   
+        SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
-}
-
-        stage('Checkov Report') {
+    tools {
+        'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
+    }
+    stages {
+        stage('Checkout') {
             steps {
                 script {
-                    // Archive the Checkov report
-                    archiveArtifacts artifacts: 'checkov-helm-report.json', allowEmptyArchive: true
-                    
-                    // Publish JUnit results (if applicable)
-                    junit allowEmptyResults: true, testResults: 'checkov-helm-report.json'
+                    checkout scm
                 }
             }
         }
 
+        // Your other existing stages...
+
+        stage('Install Checkov') {
+            steps {
+                script {
+                    // Install Checkov using pip for more reliable installation
+                    sh '''
+                        pip3 install --upgrade checkov || pip install --upgrade checkov
+                        checkov --version
+                    '''
+                }
+            }
+        }
+
+        stage('Helm Chart Analysis with Checkov') {
+            steps {
+                script {
+                    // Run Checkov on Helm charts directory
+                    sh '''
+                        # Scan raw Helm charts
+                        checkov -d frontend-helm-custom \
+                            --framework helm \
+                            --output cli \
+                            --output json --output-file-path helm-raw-report.json
+                            
+                        # Template the Helm chart to analyze the rendered Kubernetes manifests
+                        mkdir -p rendered-templates
+                        helm template frontend-helm-custom > rendered-templates/frontend-templated.yaml
+                        
+                        # Scan rendered Kubernetes manifests
+                        checkov -f rendered-templates/frontend-templated.yaml \
+                            --framework kubernetes \
+                            --output cli \
+                            --output json --output-file-path helm-templated-report.json
+                    '''
+                    
+                    // Archive the reports
+                    archiveArtifacts artifacts: 'helm-raw-report.json,helm-templated-report.json,rendered-templates/frontend-templated.yaml', allowEmptyArchive: true
+                    
+                    // Convert reports to JUnit format using a simple Python script if needed
+                    // This is optional, but helpful for Jenkins test result visualization
+                    sh '''
+                        # Check if any high severity issues found
+                        if grep -q '"severity": "HIGH"' helm-raw-report.json || grep -q '"severity": "CRITICAL"' helm-raw-report.json; then
+                            echo "High or critical severity issues found in Helm charts!"
+                            # Uncomment to fail the build
+                            # exit 1
+                        fi
+                    '''
+                }
+            }
+        }
+
+        stage('Checkov Results Summary') {
+            steps {
+                script {
+                    // Create a simple summary of findings
+                    sh '''
+                        echo "Checkov Helm Chart Analysis Summary:" > checkov-summary.txt
+                        echo "---------------------------------" >> checkov-summary.txt
+                        echo "Raw Helm Chart Issues:" >> checkov-summary.txt
+                        grep -o '"check_id": "[^"]*"' helm-raw-report.json | sort | uniq -c | sort -nr >> checkov-summary.txt
+                        echo "" >> checkov-summary.txt
+                        echo "Rendered Kubernetes Manifest Issues:" >> checkov-summary.txt
+                        grep -o '"check_id": "[^"]*"' helm-templated-report.json | sort | uniq -c | sort -nr >> checkov-summary.txt
+                        cat checkov-summary.txt
+                    '''
+                    
+                    // Archive the summary
+                    archiveArtifacts artifacts: 'checkov-summary.txt', allowEmptyArchive: true
+                }
+            }
+        }
         
         // stage('Scan Helm Charts') {
         //     steps {
