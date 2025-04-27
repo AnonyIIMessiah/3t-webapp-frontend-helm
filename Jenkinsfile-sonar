@@ -22,12 +22,15 @@ pipeline {
     stages {
         stage('Preparation') {
             steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                
                 script {
                     Clean workspace before starting
 
                     sh 'apt-get update && apt-get install -y docker.io'
 
-                }
+                
+                }}
             }
         }
 
