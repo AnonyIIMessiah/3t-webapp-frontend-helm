@@ -20,16 +20,16 @@ pipeline {
     'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
 }
     stages {
-    //     stage('Preparation') {
-    //         steps {
-    //             script {
-                    // Clean workspace before starting
+        stage('Preparation') {
+            steps {
+                script {
+                    Clean workspace before starting
 
-                    // sh 'apt-get update && apt-get install -y docker.io'
+                    sh 'apt-get update && apt-get install -y docker.io'
 
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
 
         stage('Checkout') {
             steps {
@@ -39,42 +39,44 @@ pipeline {
             }
         }
 
-//         stage('Installing Dependencies'){
-//             steps {
-//                 dir('frontend') {
-//                     script {
-//                         // Install dependencies
-//                         sh 'npm install'
-//                     }
-//                 }
-//             }
-//         }
-//         // stage('Secret Scanning with GitLeaks') {
-//         // steps {
-//         //     script {
-//         //         sh '''
-//         //             docker run --rm \
-//         //             -v ${WORKSPACE}/frontend:/code \
-//         //             zricethezav/gitleaks:latest \
-//         //             detect --source="/code" \
-//         //             --report-path=/code/gitleaks-report.json \
-//         //             --report-format=json \
-//         //             --no-git
-//         //         '''
+        stage('Installing Dependencies'){
+            steps {
+                dir('frontend') {
+                    script {
+                        // Install dependencies
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
+        stage('Secret Scanning with GitLeaks') {
+        steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+            script {
+                sh '''
+                    docker run --rm \
+                    -v ${WORKSPACE}/frontend:/code \
+                    zricethezav/gitleaks:latest \
+                    detect --source="/code" \
+                    --report-path=/code/gitleaks-report.json \
+                    --report-format=json \
+                    --no-git
+                '''
                 
-//         //         // Optional: Archive the report as an artifact
-//         //         archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+                // Optional: Archive the report as an artifact
+                archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
                 
-//         //         // Optional: Fail the build if secrets are found
-//         //         def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
-//         //         if (exitCode != '0' && exitCode != '') {
-//         //             echo "GitLeaks found secrets in the codebase! Check the report for details."
-//         //             // Uncomment the line below to fail the build
-//         //             // error "Pipeline aborted due to leaked secrets"
-//         //                 }
-//         //             }
-//         //         }
-//         //     }
+                // Optional: Fail the build if secrets are found
+                def exitCode = sh(script: 'cat gitleaks-report.json | grep -c "leak" || true', returnStdout: true).trim()
+                if (exitCode != '0' && exitCode != '') {
+                    echo "GitLeaks found secrets in the codebase! Check the report for details."
+                    // Uncomment the line below to fail the build
+                    error "Pipeline aborted due to leaked secrets"
+                        }
+                    }
+                }
+        }
+            }
         
 //             stage('Secret Scanning with GitLeaks') {
 //                 steps {
@@ -110,96 +112,105 @@ pipeline {
 //             }
 
 
-//         stage('SNYK Test') {
-//            steps {
-//                 // The plugin will automatically pick up the SNYK_TOKEN env variable
-//                 snykSecurity(
-//                     snykInstallation: 'snyk',
-//                     targetFile: 'frontend/package.json',
-//                     failOnIssues: false,
-//                     monitorProjectOnBuild: true
-//                 )
-//             }
-//         }
-//          stage('SonarCloud Analysis') {
-//             steps {
-//         withSonarQubeEnv('SonarCloud') {
-//             sh "${tool 'SonarScanner'}/bin/sonar-scanner \
-//               -Dsonar.projectKey=task-1_3t-webapp-frontend \
-//               -Dsonar.organization=task-1 \
-//               -Dsonar.host.url=https://sonarcloud.io \
-//               -Dsonar.token=${SONAR_TOKEN} \
-//               -Dsonar.sources=. \
-//               -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
-//         }
-//                 // Wait for the quality gate result
-//                 timeout(time: 5, unit: 'MINUTES') {
-//                     // waitForQualityGate abortPipeline: true
-//                     script {
-//                         def qg = waitForQualityGate()
-//                             if (qg.status != 'OK') {
-//                                 echo "Quality Gate failed: ${qg.status}"
-//                                 // echo "Reason: ${qg.conditions}"
-//                                 currentBuild.result = 'FAILURE'
-//                                 error "Pipeline aborted due to quality gate failure"
-//                     }
-//                 }
-//             }
-//         }
-//          }
-//         stage('Build') {
-//             steps {
-//                 dir('frontend') {
-//                     script {
-//                         sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
-//                         sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Install Trivy') {
-//             steps {
-//                 sh '''
-//                     # Install Trivy (for Debian/Ubuntu)
-//                     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
-//                     echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
-//                     apt-get update
-//                     apt-get install -y trivy
-//                 '''
-//             }
-//         }
+        stage('SNYK Test') {
+           steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                // The plugin will automatically pick up the SNYK_TOKEN env variable
+                snykSecurity(
+                    snykInstallation: 'snyk',
+                    targetFile: 'frontend/package.json',
+                    failOnIssues: true,
+                    monitorProjectOnBuild: true
+                )
+            }
+           }
+        }
+         stage('SonarCloud Analysis') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+        withSonarQubeEnv('SonarCloud') {
+            sh "${tool 'SonarScanner'}/bin/sonar-scanner \
+              -Dsonar.projectKey=task-1_3t-webapp-frontend \
+              -Dsonar.organization=task-1 \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.token=${SONAR_TOKEN} \
+              -Dsonar.sources=. \
+              -Dsonar.exclusions=**/node_modules/**,**/*.test.js,**/*.spec.js"
+        }
+                // Wait for the quality gate result
+                timeout(time: 5, unit: 'MINUTES') {
+                    // waitForQualityGate abortPipeline: true
+                    script {
+                        def qg = waitForQualityGate()
+                            if (qg.status != 'OK') {
+                                echo "Quality Gate failed: ${qg.status}"
+                                // echo "Reason: ${qg.conditions}"
+                                currentBuild.result = 'FAILURE'
+                                error "Pipeline aborted due to quality gate failure"
+                    }
+                }
+            }
+                        }        }
+         }
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    script {
+                        sh 'echo "REACT_APP_API_URL=${REACT_APP_API_URL}" > .env'
+                        sh 'docker build -t demoniiexe/microservice-frontend:"${IMAGE_TAG}" .'
+                    }
+                }
+            }
+        }
+        stage('Install Trivy') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                sh '''
+                    # Install Trivy (for Debian/Ubuntu)
+                    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add -
+                    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list
+                    apt-get update
+                    apt-get install -y trivy
+                '''
+            }
+            }
+        }
         
-//         stage('Push') {
-//             steps {
-//                 script {
-//                     // 
-//                         // Login to Docker Hub
-//                         sh 'docker login -u demoniiexe -p $DOCKER_PASS'
-//                         sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
-//                     // 
-//                 }
-//             }
-//         }
-//         stage('Container Image Scaning using Trivy') {
-//             steps {
-//                 // sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
-//                 sh 'trivy image demoniiexe/microservice-frontend:"${IMAGE_TAG}" '
-//             }
-//         }
+        stage('Push') {
+            steps {
+                script {
+                    // 
+                        // Login to Docker Hub
+                        sh 'docker login -u demoniiexe -p $DOCKER_PASS'
+                        sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+                    // 
+                }
+            }
+        }
+        stage('Container Image Scaning using Trivy') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+                // sh 'trivy image demoniiexe/microservice-frontend:"${IMAGE_TAG}" '
+                }
+            }
+        }
 //         // 
-//            stage('Scan Container Image using snyk') {
-//     steps {
-//         snykSecurity(
-//             snykInstallation: 'snyk',
-//             targetFile: 'frontend/Dockerfile',
-//             projectName: 'microservice-frontend',
-//             additionalArguments: '--docker demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
-//             failOnIssues: false,
-//             monitorProjectOnBuild: true,
-//             severity: 'high'
-//         )
-//     }
-// }
+           stage('Scan Container Image using snyk') {
+    steps {
+        catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+        snykSecurity(
+            snykInstallation: 'snyk',
+            targetFile: 'frontend/Dockerfile',
+            projectName: 'microservice-frontend',
+            additionalArguments: '--docker demoniiexe/microservice-frontend:"${IMAGE_TAG}"',
+            failOnIssues: true,
+            monitorProjectOnBuild: true,
+            severity: 'high'
+        )
+    }
+    }
+}
 
 
 
