@@ -187,18 +187,6 @@ pipeline {
             }
         }
 
-        stage('Push') {
-            steps {
-                script {
-                    // 
-                        // Login to Docker Hub
-                        sh 'docker login -u demoniiexe -p $DOCKER_PASS'
-                        sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
-                    // 
-                }
-            }
-        }
-//         // 
         stage('Scan Container Image using snyk') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
@@ -214,6 +202,19 @@ pipeline {
                 }
             }
         }
+        
+        stage('Push') {
+            steps {
+                script {
+                    // 
+                        // Login to Docker Hub
+                        sh 'docker login -u demoniiexe -p $DOCKER_PASS'
+                        sh 'docker push demoniiexe/microservice-frontend:"${IMAGE_TAG}"'
+                    // 
+                }
+            }
+        }
+//         // 
 
 
 
@@ -264,7 +265,7 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                     sh '''
                     // curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b .
-                    trivy config frontend-helm-custom --severity CRITICAL,HIGH
+                    trivy config frontend-helm-custom --exit-code 1 --severity CRITICAL,HIGH
                     '''
                 }
             }
