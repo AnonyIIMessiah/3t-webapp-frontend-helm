@@ -181,7 +181,7 @@ pipeline {
         stage('Container Image Scaning using Trivy') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                shh '''
+                sh '''
                 mkdir -p trivy-reports
                 trivy image --format json --output trivy-reports/trivy-image-report.json --exit-code 1 --severity HIGH,CRITICAL demoniiexe/microservice-frontend:"${IMAGE_TAG}"
                 '''
